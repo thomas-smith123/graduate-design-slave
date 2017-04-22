@@ -41,7 +41,7 @@ int main(void)
 			uint8_t i, r;
 
 	/* 128 bit key */
-	uint8_t key[] = {
+/*	uint8_t key[] = {
 		0x0f, 0x15, 0x71, 0xc9, 0x47, 0xd9, 0xe8, 0x59, 
 		0x0c, 0xb7, 0xad, 0xd6, 0xaf, 0x7f, 0x67, 0x98};
 //	uint8_t plaintext[16] = {
@@ -52,6 +52,7 @@ int main(void)
 		0xff, 0x0b, 0x84, 0x4a, 0x08, 0x53, 0xbf, 0x7c,
 		0x69, 0x34, 0xab, 0x43, 0x64, 0x14, 0x8f, 0xb9};	
 	uint8_t roundkeys[AES_ROUND_KEY_SIZE];
+*/
 		KeyExti_Config();
 			delay_init();	
 	uart_init(9600);	 //串口初始化为9600
@@ -72,7 +73,7 @@ int main(void)
   /*检测NRF模块与MCU的连接*/
 		status1 = NRF_Check(); 
 	// key schedule
-	aes_key_schedule_128(key, roundkeys);//密钥扩充
+/*	aes_key_schedule_128(key, roundkeys);//密钥扩充
 	// encryption
 	aes_encrypt_128(roundkeys, plaintext, ciphertext);//明文、密文、轮密钥
 	for (i = 0; i < AES_BLOCK_SIZE; i++) {
@@ -84,6 +85,7 @@ int main(void)
 //	for (i = 0; i < AES_BLOCK_SIZE; i++) {
 //		if ( ciphertext[i] != plaintext[i] ) { break; }
 //	}
+*/
 	printf("Welcome to use!\r\n");
 //	for(i=0;i<16;i++)
 //		printf("%2x ",ciphertext[i]);

@@ -449,7 +449,7 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>144</TopLine>
+      <TopLine>145</TopLine>
       <CurrentLine>151</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Libraries\CMSIS\startup\startup_stm32f10x_hd.s</PathWithFileName>
@@ -769,7 +769,7 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>1025</TopLine>
+      <TopLine>1026</TopLine>
       <CurrentLine>1031</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Libraries\FWlib\src\stm32f10x_i2c.c</PathWithFileName>
@@ -935,10 +935,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>0</ColumnNumber>
+      <ColumnNumber>19</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>66</TopLine>
-      <CurrentLine>79</CurrentLine>
+      <TopLine>83</TopLine>
+      <CurrentLine>104</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\User\main.c</PathWithFileName>
       <FilenameWithoutPath>main.c</FilenameWithoutPath>
@@ -970,7 +970,7 @@
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
       <TopLine>155</TopLine>
-      <CurrentLine>171</CurrentLine>
+      <CurrentLine>1</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\User\stm32f10x_it.c</PathWithFileName>
       <FilenameWithoutPath>stm32f10x_it.c</FilenameWithoutPath>
@@ -999,10 +999,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>13</ColumnNumber>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>335</TopLine>
-      <CurrentLine>359</CurrentLine>
+      <TopLine>425</TopLine>
+      <CurrentLine>392</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\User\bsp_spi_nrf.c</PathWithFileName>
       <FilenameWithoutPath>bsp_spi_nrf.c</FilenameWithoutPath>
@@ -1063,10 +1063,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>0</ColumnNumber>
+      <ColumnNumber>26</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>100</TopLine>
-      <CurrentLine>111</CurrentLine>
+      <TopLine>96</TopLine>
+      <CurrentLine>139</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\User\pcf8563.c</PathWithFileName>
       <FilenameWithoutPath>pcf8563.c</FilenameWithoutPath>
@@ -1097,8 +1097,8 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>0</TopLine>
-      <CurrentLine>0</CurrentLine>
+      <TopLine>273</TopLine>
+      <CurrentLine>1</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\User\AES.c</PathWithFileName>
       <FilenameWithoutPath>AES.c</FilenameWithoutPath>
@@ -1125,12 +1125,12 @@
       <GroupNumber>4</GroupNumber>
       <FileNumber>42</FileNumber>
       <FileType>1</FileType>
-      <tvExp>1</tvExp>
+      <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>9</ColumnNumber>
+      <ColumnNumber>29</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>105</TopLine>
-      <CurrentLine>171</CurrentLine>
+      <TopLine>170</TopLine>
+      <CurrentLine>196</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\User\usart.c</PathWithFileName>
       <FilenameWithoutPath>usart.c</FilenameWithoutPath>
@@ -1143,10 +1143,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>2</ColumnNumber>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>50</TopLine>
-      <CurrentLine>76</CurrentLine>
+      <TopLine>79</TopLine>
+      <CurrentLine>1</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\User\GPS.c</PathWithFileName>
       <FilenameWithoutPath>GPS.c</FilenameWithoutPath>
@@ -1167,10 +1167,10 @@
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>76</ColumnNumber>
+      <ColumnNumber>22</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>63</TopLine>
-      <CurrentLine>96</CurrentLine>
+      <TopLine>67</TopLine>
+      <CurrentLine>97</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Doc\readme.txt</PathWithFileName>
       <FilenameWithoutPath>readme.txt</FilenameWithoutPath>

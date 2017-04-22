@@ -17,6 +17,8 @@
 #include "bsp_spi_nrf.h"
 #include "pcf8563.h"
 #include "usart.h"
+#include "AES.h"
+#include "stdlib.h"
 
  u8 RX_BUF[RX_PLOAD_WIDTH];		//接收数据缓存
  u8 TX_BUF[TX_PLOAD_WIDTH];		//发射数据缓存
@@ -374,5 +376,90 @@ u8 NRF_Rx_Dat(u8 *rxbuf)
 	}
 	else    
 		return ERROR;                    //没收到任何数据
+}
+void shakehand(void)
+{
+	uint8_t ciphertext[AES_BLOCK_SIZE];
+	u8 i,status;
+	TIME now;
+	uint8_t key[] = {
+		0x0f, 0x15, 0x71, 0xc9, 0x47, 0xd9, 0xe8, 0x59, 
+		0x0c, 0xb7, 0xad, 0xd6, 0xaf, 0x7f, 0x67, 0x98};
+/*	uint8_t plaintext[16] = {
+//		0x01, 0x23, 0x45, 0x67, 0x89, 0xab, 0xcd, 0xef,
+//		0xfe, 0xdc, 0xba, 0x98, 0x76, 0x54, 0x32, 0x10};
+		*/
+	uint8_t ID_Num[10],mingwen1[16],mingwen2[16],miwen1[16],miwen2[16];
+	uint8_t plaintext[16] = "1305054145jrd";
+/*	const uint8_t const_cipher[AES_BLOCK_SIZE] = {
+		0xff, 0x0b, 0x84, 0x4a, 0x08, 0x53, 0xbf, 0x7c,
+		0x69, 0x34, 0xab, 0x43, 0x64, 0x14, 0x8f, 0xb9};	
+		*/
+	uint8_t roundkeys[AES_ROUND_KEY_SIZE];
+	uint8_t frame[42]=
+		{1,3,0,5,0,5,4,1,4,5,
+									0,123,0,0,
+									2,0,1,7,0,5,0,1,1,3,4,5,
+									0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+		};
+	uint8_t *syn,*seq,*ack,*fin,*time,*data;
+	syn=frame+10;seq=frame+11;
+	ack=frame+12;fin=frame+13;
+	time=frame+14;data=frame+26;
+									// key schedule
+	aes_key_schedule_128(key, roundkeys);//密钥扩充
+		
+	srand(32);
+	for(i=0;i<10;i++)
+		ID_Num[i]=frame[i];
+	*syn=1;*seq=rand();*ack=0;*fin=0;//*data=0;
+	now=PCF8563_GetTime();
+	/*****************year******************/
+	*time=now.year/1000;//2
+	*(time+1)=now.year%1000/100;//0
+	*(time+2)=now.year%1000%100%10;//1
+	*(time+3)=now.year%10;
+	/********************month**************/
+	*(time+4)=now.month/10;
+	*(time+5)=now.month%10;
+	/*******************day*****************/
+	*(time+6)=now.day/10;
+	*(time+7)=now.day%10;
+	/******************hour****************/
+	*(time+8)=now.hour/10;
+	*(time+9)=now.hour%10;
+	/*****************minute**************/
+	*(time+10)=now.mint/10;
+	*(time+11)=now.mint%10;
+	/*****************second***************/
+	*(time+12)=now.second/10;
+	*(time+13)=now.second%10;
+	for(i=0;i<16;i++)
+	{
+		mingwen1[i]=frame[i+10];
+		mingwen2[i]=frame[i+26];
+	}
+		// encryption
+	aes_encrypt_128(roundkeys, mingwen1, miwen1);//明文、密文、轮密钥
+	aes_encrypt_128(roundkeys, mingwen2, miwen2);
+	NRF_TX_Mode();
+	status = NRF_Tx_Dat(ID_Num);//ID
+	status = NRF_Tx_Dat(ID_Num+4);
+	status = NRF_Tx_Dat(ID_Num+8);
+	status = NRF_Tx_Dat(ID_Num+12);
+	status = NRF_Tx_Dat(miwen1);
+	status = NRF_Tx_Dat(miwen1+4);
+	status = NRF_Tx_Dat(miwen1+8);
+	status = NRF_Tx_Dat(miwen1+12);
+	status = NRF_Tx_Dat(miwen2);
+	status = NRF_Tx_Dat(miwen2+4);
+	status = NRF_Tx_Dat(miwen2+8);
+	status = NRF_Tx_Dat(miwen2+12);
+	NRF_RX_Mode();
+	// decryption
+//	aes_decrypt_128(roundkeys, ciphertext, ciphertext);
+
+	
+	
 }
 /*********************************************END OF FILE**********************/
