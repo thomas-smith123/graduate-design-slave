@@ -19,6 +19,8 @@
 #include "usart.h"
 #include "AES.h"
 #include "stdlib.h"
+#include "math.h"
+#include "time.h"
 
  u8 RX_BUF[RX_PLOAD_WIDTH];		//接收数据缓存
  u8 TX_BUF[TX_PLOAD_WIDTH];		//发射数据缓存
@@ -379,8 +381,9 @@ u8 NRF_Rx_Dat(u8 *rxbuf)
 }
 void shakehand(void)
 {
+	__int64 time1,time2,diff_time;
 	uint8_t ciphertext[AES_BLOCK_SIZE];
-	u8 i,status;
+	u8 i,status,keyvalue;
 	TIME now;
 	uint8_t key[] = {
 		0x0f, 0x15, 0x71, 0xc9, 0x47, 0xd9, 0xe8, 0x59, 
@@ -404,16 +407,43 @@ void shakehand(void)
 		};
 	uint8_t *syn,*seq,*ack,*fin,*time,*data;
 	syn=frame+10;seq=frame+11;
+		
 	ack=frame+12;fin=frame+13;
 	time=frame+14;data=frame+26;
+		/*******************输入密码*********************/
+		printf("输入密码\n");
+		for(i=0;i<8;i++)
+		{
+//			keyvalue=13;
+//			keyvalue=keyarray_Scan();
+			while(keyarray_Scan()==0)
+				keyvalue=keyarray_Scan();
+			switch(keyvalue)
+			{
+				case 1:key[i]=keyvalue;break;
+				case 2:key[i]=keyvalue;break;
+				case 3:key[i]=keyvalue;break;
+				case 4:key[i]=keyvalue;break;
+				case 5:key[i]=keyvalue;break;
+				case 6:key[i]=keyvalue;break;
+				case 7:key[i]=keyvalue;break;
+				case 8:key[i]=keyvalue;break;
+				case 9:key[i]=keyvalue;break;
+				case 0:key[i]=0;break;
+				case 10:i--;
+				default:break;
+			}
+		} 
+		printf("\n",key);
 									// key schedule
-	aes_key_schedule_128(key, roundkeys);//密钥扩充
-		
+	aes_key_schedule_128(key, roundkeys);//密钥扩充		
 	srand(32);
 	for(i=0;i<10;i++)
 		ID_Num[i]=frame[i];
 	*syn=1;*seq=rand();*ack=0;*fin=0;//*data=0;
 	now=PCF8563_GetTime();
+		printf("%d年 ",now.year);printf("%d月 ",now.month);printf("%d日 ",now.day);
+		printf("%d时 ",now.hour);printf("%d分 ",now.mint);printf("%d秒 ",now.second);
 	/*****************year******************/
 	*time=now.year/1000;//2
 	*(time+1)=now.year%1000/100;//0
@@ -440,26 +470,102 @@ void shakehand(void)
 		mingwen2[i]=frame[i+26];
 	}
 		// encryption
-	aes_encrypt_128(roundkeys, mingwen1, miwen1);//明文、密文、轮密钥
-	aes_encrypt_128(roundkeys, mingwen2, miwen2);
-	NRF_TX_Mode();
-	status = NRF_Tx_Dat(ID_Num);//ID
-	status = NRF_Tx_Dat(ID_Num+4);
-	status = NRF_Tx_Dat(ID_Num+8);
-	status = NRF_Tx_Dat(ID_Num+12);
-	status = NRF_Tx_Dat(miwen1);
-	status = NRF_Tx_Dat(miwen1+4);
-	status = NRF_Tx_Dat(miwen1+8);
-	status = NRF_Tx_Dat(miwen1+12);
-	status = NRF_Tx_Dat(miwen2);
-	status = NRF_Tx_Dat(miwen2+4);
-	status = NRF_Tx_Dat(miwen2+8);
-	status = NRF_Tx_Dat(miwen2+12);
-	NRF_RX_Mode();
+		aes_encrypt_128(roundkeys, mingwen1, miwen1);//明文、密文、轮密钥
+		aes_encrypt_128(roundkeys, mingwen2, miwen2);
+		NRF_TX_Mode();
+		status = NRF_Tx_Dat(ID_Num);//ID
+		status = NRF_Tx_Dat(ID_Num+4);
+		status = NRF_Tx_Dat(ID_Num+8);
+		status = NRF_Tx_Dat(ID_Num+12);
+		status = NRF_Tx_Dat(miwen1);
+		status = NRF_Tx_Dat(miwen1+4);
+		status = NRF_Tx_Dat(miwen1+8);
+		status = NRF_Tx_Dat(miwen1+12);
+		status = NRF_Tx_Dat(miwen2);
+		status = NRF_Tx_Dat(miwen2+4);
+		status = NRF_Tx_Dat(miwen2+8);
+		status = NRF_Tx_Dat(miwen2+12);
+		NRF_RX_Mode();
+		status = NRF_Rx_Dat(ID_Num);
+		status = NRF_Rx_Dat(ID_Num+4);
+		status = NRF_Rx_Dat(ID_Num+8);
+		status = NRF_Rx_Dat(ID_Num+12);
+		status = NRF_Rx_Dat(miwen1);
+		status = NRF_Rx_Dat(miwen1+4);
+		status = NRF_Rx_Dat(miwen1+8);
+		status = NRF_Rx_Dat(miwen1+12);
+		status = NRF_Rx_Dat(miwen2);
+		status = NRF_Rx_Dat(miwen2+4);
+		status = NRF_Rx_Dat(miwen2+8);
+		status = NRF_Rx_Dat(miwen2+12);
+/*******************查找对应ID的密钥***********假设密码已知*********/
+		aes_decrypt_128(roundkeys,ID_Num,ID_Num);
+		aes_decrypt_128(roundkeys,miwen1,miwen1);
+		aes_decrypt_128(roundkeys,miwen2,miwen2);
+		now =PCF8563_GetTime();	
+		time1=20*100000000000+now.year*10000000000+now.month*100000000+now.day*1000000+now.hour*10000+now.mint*100+now.second;////////////////////////////////next///////
+		time2=20*100000000000+(Save_Data.UTCDate[4]*10+Save_Data.UTCDate[5])*10000000000+(Save_Data.UTCDate[2]*10+Save_Data.UTCDate[3])*100000000+(Save_Data.UTCDate[0]*10+Save_Data.UTCDate[1])*1000000+
+		(Save_Data.UTCTime[0]*10+Save_Data.UTCTime[1])*10000+(Save_Data.UTCTime[2]*10+Save_Data.UTCTime[3])*100+(Save_Data.UTCTime[4]*10+Save_Data.UTCTime[5]);//GPS:UTC Date:ddmmyy
+		diff_time=difftime(time1,time2);////////////////////next///////		
+		if(abs(diff_time)<=5)
+		{
+			if(*syn==1 && *(miwen1+2)==(*seq+1))//在重建帧之前判断
+			{
+				for(i=0;i<10;i++)frame[i]=ID_Num[i];
+				for(i=0;i<16;i++)
+				{
+					frame[10+i]=miwen1[i];
+					frame[26+i]=miwen2[i];
+				}//帧重建
+		//		*syn=0;*seq=rand();
+					now=PCF8563_GetTime();
+			/*****************year******************/
+			*time=now.year/1000;//2
+			*(time+1)=now.year%1000/100;//0
+			*(time+2)=now.year%1000%100%10;//1
+			*(time+3)=now.year%10;
+			/********************month**************/
+			*(time+4)=now.month/10;
+			*(time+5)=now.month%10;
+			/*******************day*****************/
+			*(time+6)=now.day/10;
+			*(time+7)=now.day%10;
+			/******************hour****************/
+			*(time+8)=now.hour/10;
+			*(time+9)=now.hour%10;
+			/*****************minute**************/
+			*(time+10)=now.mint/10;
+			*(time+11)=now.mint%10;
+			/*****************second***************/
+			*(time+12)=now.second/10;
+			*(time+13)=now.second%10;
+			for(i=0;i<16;i++)
+			{
+				mingwen1[i]=frame[i+10];
+				mingwen2[i]=frame[i+26];
+			}
+				// encryption
+			aes_encrypt_128(roundkeys, mingwen1, miwen1);//明文、密文、轮密钥
+			aes_encrypt_128(roundkeys, mingwen2, miwen2);
+			NRF_TX_Mode();
+			status = NRF_Tx_Dat(ID_Num);//ID
+			status = NRF_Tx_Dat(ID_Num+4);
+			status = NRF_Tx_Dat(ID_Num+8);
+			status = NRF_Tx_Dat(ID_Num+12);
+			status = NRF_Tx_Dat(miwen1);
+			status = NRF_Tx_Dat(miwen1+4);
+			status = NRF_Tx_Dat(miwen1+8);
+			status = NRF_Tx_Dat(miwen1+12);
+			status = NRF_Tx_Dat(miwen2);
+			status = NRF_Tx_Dat(miwen2+4);
+			status = NRF_Tx_Dat(miwen2+8);
+			status = NRF_Tx_Dat(miwen2+12);
+			}
+		}
 	// decryption
 //	aes_decrypt_128(roundkeys, ciphertext, ciphertext);
 
-	
+	printf("shakehand init");
 	
 }
 /*********************************************END OF FILE**********************/

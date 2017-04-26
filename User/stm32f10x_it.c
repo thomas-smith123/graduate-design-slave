@@ -160,37 +160,38 @@ void EXTI4_IRQHandler(void)
 //txbuf[0]=key.second;txbuf[1]=key.mint;txbuf[2]=key.hour;txbuf[3]=key.day;
 	if(EXTI_GetITStatus(EXTI_Line4) != RESET) //确保是否产生了EXTI Line中断
 	{
+		shakehand();
 		  while(1)
-  {
-    NRF_TX_Mode();
-    /*开始发送数据*/	
-//		for(i=0;i<16;i++)
-    status = NRF_Tx_Dat(ciphertext);//每次只能发送前四个
-//		NRF_RX_Mode();		status = NRF_Rx_Dat(rxbuf);
-		status = NRF_Tx_Dat(ciphertext+4);
-    status = NRF_Tx_Dat(ciphertext+8);
-    status = NRF_Tx_Dat(ciphertext+12);
-//		printf("code in interrupt \n");		
-//		for(i=0;i<16;i++)
-//			printf("%2x ",ciphertext[i]);
-//		printf("\n");
-		break;		
-//    NRF_RX_Mode();
-//    /*等待接收数据*/
-//    status = NRF_Rx_Dat(rxbuf);
-//    /*判断接收状态*/
-//    switch(status)
-//    {
-//      case RX_DR:
-//      for(i=0;i<4;i++)
-//      {					
-//        txbuf[i] =rxbuf[i];
-//      }
-//      break;
-//      case ERROR:
-// //       printf("\r\n 主机端 接收出错。   \r\n");
-//      break;  		
-//    }
+			{
+				NRF_TX_Mode();
+			/*开始发送数据*/	
+	//		for(i=0;i<16;i++)
+				status = NRF_Tx_Dat(ciphertext);//每次只能发送前四个
+		//		NRF_RX_Mode();		status = NRF_Rx_Dat(rxbuf);
+				status = NRF_Tx_Dat(ciphertext+4);
+				status = NRF_Tx_Dat(ciphertext+8);
+				status = NRF_Tx_Dat(ciphertext+12);
+		//		printf("code in interrupt \n");		
+		//		for(i=0;i<16;i++)
+		//			printf("%2x ",ciphertext[i]);
+		//		printf("\n");
+				break;		
+		//    NRF_RX_Mode();
+		//    /*等待接收数据*/
+		//    status = NRF_Rx_Dat(rxbuf);
+		//    /*判断接收状态*/
+		//    switch(status)
+		//    {
+		//      case RX_DR:
+		//      for(i=0;i<4;i++)
+		//      {					
+		//        txbuf[i] =rxbuf[i];
+		//      }
+		//      break;
+		//      case ERROR:
+		// //       printf("\r\n 主机端 接收出错。   \r\n");
+		//      break;  		
+		//    }
   }// while(1)}
 
 		EXTI_ClearITPendingBit(EXTI_Line4);     //清除中断标志位
