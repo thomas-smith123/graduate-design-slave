@@ -85,12 +85,13 @@ u8 keyarray_Read()
 	}	
 //	GPIO_SetBits(GPIOE,GPIO_Pin_9|GPIO_Pin_10|GPIO_Pin_11);
 //	GPIO_ResetBits(GPIOE,GPIO_Pin_12|GPIO_Pin_13|GPIO_Pin_14|GPIO_Pin_15);
-	while(!keydown());//按键松开
+	while(keydown());//按键松开
 	return KeyValue;
 }
 u8 keydown(void)
 {
 	//PB9到PB11全为高
+	keyarry_GPIO_init();
 	GPIO_Write(GPIOE,0x0e00);
 	if((GPIO_ReadInputData(GPIOE)&0xf000)!=0x0000)
 		return 1;
