@@ -77,7 +77,7 @@ u8 keyarray_Read()
 	GPIO_ResetBits(GPIOE,GPIO_Pin_9|GPIO_Pin_10);
 	switch(GPIO_ReadInputData(GPIOE)&0xf000)// 9,10,11,12,13,14,15
 	{
-		case 0x1000:KeyValue=11;break;
+		case 0x1000:KeyValue=10;break;
 		case 0x2000:KeyValue=9;break;
 		case 0x4000:KeyValue=6;break;
 		case 0x8000:KeyValue=3;break;
@@ -94,7 +94,8 @@ u8 keydown(void)
 	keyarry_GPIO_init();
 	GPIO_Write(GPIOE,0x0e00);
 	if((GPIO_ReadInputData(GPIOE)&0xf000)!=0x0000)
-		return 1;
+	{delay_ms(10);
+		return 1;}
 	else 
 		return 0;
 }
@@ -104,7 +105,7 @@ u8 keyarray_Scan()
 	keyarry_GPIO_init();
 	if(keydown())
 	{
-		delay_ms(20);
+		delay_ms(30);
 		if(keydown())
 			u=keyarray_Read();
 			return  u;

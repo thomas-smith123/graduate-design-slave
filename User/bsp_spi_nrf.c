@@ -415,8 +415,8 @@ void shakehand(void)
 	now_GPS=(struct tm*)malloc(sizeof(struct tm));	
 	now_pcf=(struct tm*)malloc(sizeof(struct tm));
 		/******************* ‰»Î√‹¬Î*********************/
-/*		printf(" ‰»Î√‹¬Î\n");
-		for(i=0;i<16;i++)
+		printf(" ‰»Î√‹¬Î\n");
+		for(i=0;i!=16;i++)
 		{
 //			keyvalue=13;
 //			keyvalue=keyarray_Scan();
@@ -434,13 +434,13 @@ void shakehand(void)
 				case 8:key[i]=keyvalue;printf("8");break;
 				case 9:key[i]=keyvalue;printf("9");break;
 				case 0:key[i]=0;printf("0");break;
-				case 10:i--;
+				case 10:i-=2;break;
 				default:break;
 			}
 		} 
 		printf("key:");
 		for(i=0;i<16;i++)printf("%d",key[i]);
-		*/
+		
 									// key schedule
 	aes_key_schedule_128(key, roundkeys);//√‹‘ø¿©≥‰		
 	srand(32);
