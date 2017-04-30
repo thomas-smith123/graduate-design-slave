@@ -10,5 +10,6 @@ void keyarry_GPIO_init(void);
 u8 keyarray_Read(void);
 u8 keyarray_Scan(void);
 u8 keydown(void);
+void verify_in(void);
 #endif
 

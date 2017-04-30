@@ -103,7 +103,7 @@ u8 PCF8563_Read(u8 PCF_addr)
 
 	return rev_data;
 	}
-void PCF_SetTime(unsigned char year, unsigned char month, unsigned char day, unsigned char hour, unsigned char mint, unsigned char second)
+void PCF_SetTime(int year, int month, int day, int hour, int mint, int second)
 {
 	PCF8563_Init();
 	I2C_Mode_Config();	

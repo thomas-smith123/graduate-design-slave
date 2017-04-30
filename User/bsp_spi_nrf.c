@@ -76,7 +76,7 @@ void SPI_NRF_Init(void)
   SPI_InitStructure.SPI_CPOL = SPI_CPOL_Low;		 				//时钟极性，空闲时为低
   SPI_InitStructure.SPI_CPHA = SPI_CPHA_1Edge;						//第1个边沿有效，上升沿为采样时刻
   SPI_InitStructure.SPI_NSS = SPI_NSS_Soft;		   					//NSS信号由软件产生
-  SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_16;  //8分频，9MHz
+  SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_32;  //8分频，9MHz
   SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_MSB;  				//高位在前
   SPI_InitStructure.SPI_CRCPolynomial = 7;
   SPI_Init(SPI2, &SPI_InitStructure);
@@ -209,7 +209,7 @@ u8 SPI_NRF_WriteBuf(u8 reg ,u8 *pBuf,u8 bytes)
   	  /*向缓冲区写入数据*/
 	 for(byte_cnt=0;byte_cnt<bytes;byte_cnt++)
 		{
-			printf("%2x ",*pBuf);
+//			printf("%2x ",*pBuf);
 			SPI_NRF_RW(*pBuf++);	//写数据到缓冲区 			
 		}	 
 	  	   
@@ -381,7 +381,7 @@ u8 NRF_Rx_Dat(u8 *rxbuf)
 }
 void shakehand(void)
 {
-	__int64 time1,time2;
+//	__int64 time1,time2;
 	int diff_time,rand_const;
 	uint8_t ciphertext[AES_BLOCK_SIZE];
 	u8 i,status,keyvalue;
@@ -408,39 +408,38 @@ void shakehand(void)
 									0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 		};
 	uint8_t *syn,*seq,*ack,*fin,*time,*data;
-	syn=frame+10;seq=frame+11;
-		
+	syn=frame+10;seq=frame+11;		
 	ack=frame+12;fin=frame+13;
 	time=frame+14;data=frame+26;
 	now_GPS=(struct tm*)malloc(sizeof(struct tm));	
 	now_pcf=(struct tm*)malloc(sizeof(struct tm));
 		/*******************输入密码*********************/
-		printf("输入密码\n");
-		for(i=0;i!=16;i++)
-		{
-//			keyvalue=13;
-//			keyvalue=keyarray_Scan();
-			while(!keydown());
-				keyvalue=keyarray_Scan();
-			switch(keyvalue)
-			{
-				case 1:key[i]=keyvalue;printf("1");break;
-				case 2:key[i]=keyvalue;printf("2");break;
-				case 3:key[i]=keyvalue;printf("3");break;
-				case 4:key[i]=keyvalue;printf("4");break;
-				case 5:key[i]=keyvalue;printf("5");break;
-				case 6:key[i]=keyvalue;printf("6");break;
-				case 7:key[i]=keyvalue;printf("7");break;
-				case 8:key[i]=keyvalue;printf("8");break;
-				case 9:key[i]=keyvalue;printf("9");break;
-				case 0:key[i]=0;printf("0");break;
-				case 10:i-=2;break;
-				default:break;
-			}
-		} 
-		printf("key:");
-		for(i=0;i<16;i++)printf("%d",key[i]);
-		
+//		printf("输入密码\n");
+//		for(i=0;i!=16;i++)
+//		{
+////			keyvalue=13;
+////			keyvalue=keyarray_Scan();
+//			while(!keydown());
+//				keyvalue=keyarray_Scan();
+//			switch(keyvalue)
+//			{
+//				case 1:key[i]=keyvalue;printf("1");break;
+//				case 2:key[i]=keyvalue;printf("2");break;
+//				case 3:key[i]=keyvalue;printf("3");break;
+//				case 4:key[i]=keyvalue;printf("4");break;
+//				case 5:key[i]=keyvalue;printf("5");break;
+//				case 6:key[i]=keyvalue;printf("6");break;
+//				case 7:key[i]=keyvalue;printf("7");break;
+//				case 8:key[i]=keyvalue;printf("8");break;
+//				case 9:key[i]=keyvalue;printf("9");break;
+//				case 0:key[i]=0;printf("0");break;
+//				case 10:i-=2;break;
+//				default:break;
+//			}
+//		} 
+//		printf("key:");
+//		for(i=0;i<16;i++)printf("%d",key[i]);
+//		
 									// key schedule
 	aes_key_schedule_128(key, roundkeys);//密钥扩充		
 	srand(32);
@@ -449,7 +448,7 @@ void shakehand(void)
 		*syn=1;*seq=rand();*ack=0;*fin=0;//*data=0;
 		rand_const=*seq;
 	now=PCF8563_GetTime();
-		printf("%d年 ",now.year);printf("%d月 ",now.month);printf("%d日 ",now.day);
+		printf("20%d年 ",now.year);printf("%d月 ",now.month);printf("%d日 ",now.day);
 		printf("%d时 ",now.hour);printf("%d分 ",now.mint);printf("%d秒 \n",now.second);
 	/*****************year******************/
 	*time=2;//2
@@ -488,6 +487,7 @@ void shakehand(void)
 		for(i=0;i<16;i++)printf("%d",mingwen2[i]);
 		printf("\n");
 		NRF_TX_Mode();
+		delay_ms(3);
 		status = NRF_Tx_Dat(ID_Num);//ID
 		status = NRF_Tx_Dat(ID_Num+4);
 		status = NRF_Tx_Dat(ID_Num+8);
@@ -500,7 +500,9 @@ void shakehand(void)
 		status = NRF_Tx_Dat(miwen2+4);
 		status = NRF_Tx_Dat(miwen2+8);
 		status = NRF_Tx_Dat(miwen2+12);
+//		delay_us(20);
 		NRF_RX_Mode();
+//		delay_ms(3);
 		status = NRF_Rx_Dat(ID_Num);
 		status = NRF_Rx_Dat(ID_Num+4);
 		status = NRF_Rx_Dat(ID_Num+8);
@@ -514,13 +516,7 @@ void shakehand(void)
 		status = NRF_Rx_Dat(miwen2+8);
 		status = NRF_Rx_Dat(miwen2+12);
 		now =PCF8563_GetTime();	
-		printf("pcf8563 time %d %d %d %d %d %d\n",now.year,now.month,now.day,now.hour,now.mint,now.second);
-		now_pcf->tm_hour=now.hour;
-		now_pcf->tm_sec=now.second;
-		now_pcf->tm_min=now.mint;
-		now_pcf->tm_mday=now.day;
-		now_pcf->tm_mon=now.month;
-		now_pcf->tm_year=2000+now.year;
+//		printf("pcf8563 time: %d %d %d %d %d %d\n",now.year,now.month,now.day,now.hour,now.mint,now.second);
 /*******************查找对应ID的密钥***********假设密码已知*********/
 
 		//aes_decrypt_128(roundkeys,ID_Num,ID_Num);
@@ -532,23 +528,30 @@ void shakehand(void)
 			frame[10+i]=miwen1[i];
 			frame[26+i]=miwen2[i];
 		}//帧重建
+		printf("帧重建完成\n");
 		now_GPS->tm_year=*time*1000+*(time+1)*100+*(time+2)*10+*(time+3);
 		now_GPS->tm_mon=*(time+4)*10+*(time+5);
 		now_GPS->tm_mday=*(time+6)*10+*(time+7);
 		now_GPS->tm_hour=*(time+8)*10+*(time+9);
 		now_GPS->tm_min=*(time+10)*10+*(time+11);
 		now_GPS->tm_sec=*(time+12)*10+*(time+13);	
-//		time1=20*100000000000+now.year*10000000000+now.month*100000000+now.day*1000000+now.hour*10000+now.mint*100+now.second;////////////////////////////////next///////
-//		time2=20*100000000000+(Save_Data.UTCDate[4]*10+Save_Data.UTCDate[5])*10000000000+(Save_Data.UTCDate[2]*10+Save_Data.UTCDate[3])*100000000+(Save_Data.UTCDate[0]*10+Save_Data.UTCDate[1])*1000000+
-//		(Save_Data.UTCTime[0]*10+Save_Data.UTCTime[1])*10000+(Save_Data.UTCTime[2]*10+Save_Data.UTCTime[3])*100+(Save_Data.UTCTime[4]*10+Save_Data.UTCTime[5]);//GPS:UTC Date:ddmmyy
+		now_pcf->tm_hour=now.hour;
+		now_pcf->tm_sec=now.second;
+		now_pcf->tm_min=now.mint;
+		now_pcf->tm_mday=now.day;
+		now_pcf->tm_mon=now.month;
+		now_pcf->tm_year=2000+now.year;
+
 		diff_time=difftime(mktime(now_GPS),mktime(now_pcf));////////////////////next///////		
-		printf("%d diff_time",diff_time);
+		printf("%d diff_time \n",diff_time);
 		if(abs(diff_time)<=60)
 		{
 			if(*syn==1 && *ack==(rand_const+1))//在重建帧之前判断
 			{				
-		//		*syn=0;*seq=rand();
-					now=PCF8563_GetTime();
+				*syn=0;
+				*ack=++*seq;
+				*seq=rand();
+				now=PCF8563_GetTime();
 			/*****************year******************/
 			*time=now.year/1000;//2
 			*(time+1)=now.year%1000/100;//0
@@ -578,6 +581,7 @@ void shakehand(void)
 			aes_encrypt_128(roundkeys, mingwen1, miwen1);//明文、密文、轮密钥
 			aes_encrypt_128(roundkeys, mingwen2, miwen2);
 			NRF_TX_Mode();
+			delay_ms(5);
 			status = NRF_Tx_Dat(ID_Num);//ID
 			status = NRF_Tx_Dat(ID_Num+4);
 			status = NRF_Tx_Dat(ID_Num+8);
@@ -590,7 +594,8 @@ void shakehand(void)
 			status = NRF_Tx_Dat(miwen2+4);
 			status = NRF_Tx_Dat(miwen2+8);
 			status = NRF_Tx_Dat(miwen2+12);
-			printf("shakehand init");
+			printf("shakehand init!\n");
+			printf("输入验证码:");
 			}
 		}
 	// decryption

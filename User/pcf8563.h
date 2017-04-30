@@ -23,18 +23,18 @@
 #define Timer_Countdown_Value 0x0F
 typedef struct 
 {
- unsigned char year;
- unsigned char month;
- unsigned char day;
- unsigned char hour;
- unsigned char mint;
- unsigned char second;
+ int year;
+ int month;
+ int day;
+ int hour;
+ int mint;
+ int second;
 }TIME;
 static void PCF8563_Init(void);
 static void I2C_Mode_Config(void);
-void PCF_SetTime(unsigned char year, unsigned char month, 
-								 unsigned char day, unsigned char hour, 
-								 unsigned char mint, unsigned char second);
+void PCF_SetTime(int year, int month, 
+								 int day, int hour, 
+								 int mint, int second);
 TIME PCF8563_GetTime(void);
 u8 rtc8563_Read(u8 rtc_addr);
 #endif  
