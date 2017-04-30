@@ -76,7 +76,7 @@ void SPI_NRF_Init(void)
   SPI_InitStructure.SPI_CPOL = SPI_CPOL_Low;		 				//时钟极性，空闲时为低
   SPI_InitStructure.SPI_CPHA = SPI_CPHA_1Edge;						//第1个边沿有效，上升沿为采样时刻
   SPI_InitStructure.SPI_NSS = SPI_NSS_Soft;		   					//NSS信号由软件产生
-  SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_32;  //8分频，9MHz
+  SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_8;  //8分频，9MHz
   SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_MSB;  				//高位在前
   SPI_InitStructure.SPI_CRCPolynomial = 7;
   SPI_Init(SPI2, &SPI_InitStructure);
@@ -548,9 +548,6 @@ void shakehand(void)
 		{
 			if(*syn==1 && *ack==(rand_const+1))//在重建帧之前判断
 			{				
-				*syn=0;
-				*ack=++*seq;
-				*seq=rand();
 				now=PCF8563_GetTime();
 			/*****************year******************/
 			*time=now.year/1000;//2
@@ -572,11 +569,16 @@ void shakehand(void)
 			/*****************second***************/
 			*(time+12)=now.second/10;
 			*(time+13)=now.second%10;
+				*syn=0;
+				*ack=++*seq;
+				*seq=rand();
+
 			for(i=0;i<16;i++)
 			{
 				mingwen1[i]=frame[i+10];
 				mingwen2[i]=frame[i+26];
 			}
+			
 				// encryption
 			aes_encrypt_128(roundkeys, mingwen1, miwen1);//明文、密文、轮密钥
 			aes_encrypt_128(roundkeys, mingwen2, miwen2);
@@ -600,7 +602,8 @@ void shakehand(void)
 		}
 	// decryption
 //	aes_decrypt_128(roundkeys, ciphertext, ciphertext);
-
+		free(now_GPS);
+		free(now_pcf);
 	
 	
 }
