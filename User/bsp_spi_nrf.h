@@ -83,7 +83,7 @@ void NRF_RX_Mode(void);
 u8 NRF_Rx_Dat(u8 *rxbuf);
 u8 NRF_Tx_Dat(u8 *txbuf);
 u8 NRF_Check(void); 
-void shakehand(void);
+u8 shakehand(void);
 
 #endif /* __SPI_NRF_H */
 
