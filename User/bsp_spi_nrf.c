@@ -476,7 +476,7 @@ u8 shakehand(void)
 		aes_encrypt_128(roundkeys, mingwen1, miwen1);//Ã÷ÎÄ¡¢ÃÜÎÄ¡¢ÂÖÃÜÔ¿
 		aes_encrypt_128(roundkeys, mingwen2, miwen2);
 		NRF_TX_Mode();
-		delay_ms(3);
+		delay_ms(1);
 		status = NRF_Tx_Dat(ID_Num);//ID
 		status = NRF_Tx_Dat(ID_Num+4);
 		status = NRF_Tx_Dat(ID_Num+8);
@@ -489,7 +489,7 @@ u8 shakehand(void)
 		status = NRF_Tx_Dat(miwen2+4);
 		status = NRF_Tx_Dat(miwen2+8);
 		status = NRF_Tx_Dat(miwen2+12);
-//		delay_us(20);
+		delay_us(20);
 		NRF_RX_Mode();
 //		delay_ms(3);
 		status = NRF_Rx_Dat(ID_Num);
@@ -530,7 +530,6 @@ u8 shakehand(void)
 		now_pcf->tm_mday=now.day;
 		now_pcf->tm_mon=now.month;
 		now_pcf->tm_year=2000+now.year;
-
 		diff_time=difftime(mktime(now_GPS),mktime(now_pcf));////////////////////next///////		
 		printf("%d diff_time \n",diff_time);
 		if(abs(diff_time)<=60)
@@ -675,7 +674,5 @@ u8 shakehand(void)
 //	aes_decrypt_128(roundkeys, ciphertext, ciphertext);
 		free(now_GPS);
 		free(now_pcf);
-	
-	
 }
 /*********************************************END OF FILE**********************/

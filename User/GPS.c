@@ -10,7 +10,6 @@ void errorLog(int num)
 	  	printf("ERROR%d\r\n",num);
 	}
 }
-
 void parseGpsBuffer()
 {
 	char *subString;
@@ -20,9 +19,7 @@ void parseGpsBuffer()
 	{
 		Save_Data.isGetData = false;
 		printf("**************\r\n");
-		printf(Save_Data.GPS_Buffer);
-
-		
+		printf(Save_Data.GPS_Buffer);		
 		for (i = 0 ; i <= 9 ; i++)
 		{
 			if (i == 0)
@@ -47,14 +44,12 @@ void parseGpsBuffer()
 						case 9:memcpy(Save_Data.UTCDate, subString, subStringNext - subString);break;	//获取E/W
 						default:break;
 					}
-
 					subString = subStringNext;
 					Save_Data.isParseData = true;
 					if(usefullBuffer[0] == 'A')
 						Save_Data.isUsefull = true;
 					else if(usefullBuffer[0] == 'V')
 						Save_Data.isUsefull = false;
-
 				}
 				else
 				{
@@ -80,9 +75,7 @@ void parseGpsBuffer()
 		printf("pcf8563时间：");printf("%d年 ",now1.year);printf("%d月 ",now1.month);printf("%d日 ",now1.day);
 		printf("%d时 ",now1.hour);printf("%d分 ",now1.mint);printf("%d秒 \n",now1.second);
 	}
-
 }
-
 void printGpsBuffer()
 {
 	if (Save_Data.isParseData)
