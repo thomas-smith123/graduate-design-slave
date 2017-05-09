@@ -76,8 +76,7 @@ int main(void)
 		OLED_ShowCHinese(72,0,17);
 		OLED_ShowCHinese(90,0,18);
 		
-		CLI();
-		SEI();		
+	
   /*检测NRF模块与MCU的连接*/
 		status1 = NRF_Check(); 
 	// key schedule
@@ -99,7 +98,10 @@ int main(void)
 //		printf("%2x ",ciphertext[i]);
 //	printf("\n");
 	while(1)	
-		{		
+		{	
+		CLI();
+		SEI();	
+GPIO_SetBits(GPIOE,GPIO_Pin_4);	
 			parseGpsBuffer();
 			printGpsBuffer();
 		};

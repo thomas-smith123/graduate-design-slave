@@ -410,32 +410,32 @@ u8 shakehand(void)
 	now_GPS=(struct tm*)malloc(sizeof(struct tm));	
 	now_pcf=(struct tm*)malloc(sizeof(struct tm));
 		/******************* ‰»Î√‹¬Î*********************/
-		printf(" ‰»Î√‹¬Î:\n");
-		for(i=0;i!=16;i++)
-		{
-//			keyvalue=13;
-//			keyvalue=keyarray_Scan();
-			while(!keydown());
-				keyvalue=keyarray_Scan();
-			switch(keyvalue)
-			{
-				case 1:key[i]=keyvalue;printf("1");break;
-				case 2:key[i]=keyvalue;printf("2");break;
-				case 3:key[i]=keyvalue;printf("3");break;
-				case 4:key[i]=keyvalue;printf("4");break;
-				case 5:key[i]=keyvalue;printf("5");break;
-				case 6:key[i]=keyvalue;printf("6");break;
-				case 7:key[i]=keyvalue;printf("7");break;
-				case 8:key[i]=keyvalue;printf("8");break;
-				case 9:key[i]=keyvalue;printf("9");break;
-				case 0:key[i]=0;printf("0");break;
-				case 10:i-=2;break;
-				default:break;
-			}
-		} 
-		printf("key:");
-		for(i=0;i<16;i++)printf("%d",key[i]);
-		printf("\n");
+//		printf(" ‰»Î√‹¬Î:\n");
+//		for(i=0;i!=16;i++)
+//		{
+////			keyvalue=13;
+////			keyvalue=keyarray_Scan();
+//			while(!keydown());
+//				keyvalue=keyarray_Scan();
+//			switch(keyvalue)
+//			{
+//				case 1:key[i]=keyvalue;printf("1");break;
+//				case 2:key[i]=keyvalue;printf("2");break;
+//				case 3:key[i]=keyvalue;printf("3");break;
+//				case 4:key[i]=keyvalue;printf("4");break;
+//				case 5:key[i]=keyvalue;printf("5");break;
+//				case 6:key[i]=keyvalue;printf("6");break;
+//				case 7:key[i]=keyvalue;printf("7");break;
+//				case 8:key[i]=keyvalue;printf("8");break;
+//				case 9:key[i]=keyvalue;printf("9");break;
+//				case 0:key[i]=0;printf("0");break;
+//				case 10:i-=2;break;
+//				default:break;
+//			}
+//		} 
+//		printf("key:");
+//		for(i=0;i<16;i++)printf("%d",key[i]);
+//		printf("\n");
 									// key schedule
 	aes_key_schedule_128(key, roundkeys);//√‹‘ø¿©≥‰		
 	srand(now.second);
@@ -476,8 +476,8 @@ u8 shakehand(void)
 		aes_encrypt_128(roundkeys, mingwen1, miwen1);//√˜Œƒ°¢√‹Œƒ°¢¬÷√‹‘ø
 		aes_encrypt_128(roundkeys, mingwen2, miwen2);
 		NRF_TX_Mode();
-		delay_ms(1);
-		status = NRF_Tx_Dat(ID_Num);//ID
+		delay_ms(100);
+		status = NRF_Tx_Dat(ID_Num);//ID 22.75424900   0.7442174s
 		status = NRF_Tx_Dat(ID_Num+4);
 		status = NRF_Tx_Dat(ID_Num+8);
 		status = NRF_Tx_Dat(ID_Num+12);
@@ -488,11 +488,11 @@ u8 shakehand(void)
 		status = NRF_Tx_Dat(miwen2);
 		status = NRF_Tx_Dat(miwen2+4);
 		status = NRF_Tx_Dat(miwen2+8);
-		status = NRF_Tx_Dat(miwen2+12);
-		delay_us(20);
-		NRF_RX_Mode();
-//		delay_ms(3);
-		status = NRF_Rx_Dat(ID_Num);
+		status = NRF_Tx_Dat(miwen2+12);//23.49846640
+		delay_ms(20);
+		NRF_RX_Mode();//24.20729630  0.7091056s
+		delay_ms(30);
+		status = NRF_Rx_Dat(ID_Num);//24.91640190
 		status = NRF_Rx_Dat(ID_Num+4);
 		status = NRF_Rx_Dat(ID_Num+8);
 		status = NRF_Rx_Dat(ID_Num+12);
@@ -578,7 +578,7 @@ u8 shakehand(void)
 			aes_encrypt_128(roundkeys, mingwen1, miwen1);//√˜Œƒ°¢√‹Œƒ°¢¬÷√‹‘ø
 			aes_encrypt_128(roundkeys, mingwen2, miwen2);
 			NRF_TX_Mode();
-			delay_ms(5);
+			delay_ms(150);
 			status = NRF_Tx_Dat(ID_Num);//ID
 			status = NRF_Tx_Dat(ID_Num+4);
 			status = NRF_Tx_Dat(ID_Num+8);
@@ -662,17 +662,25 @@ u8 shakehand(void)
 		status = NRF_Tx_Dat(miwen2+4);
 		status = NRF_Tx_Dat(miwen2+8);
 		status = NRF_Tx_Dat(miwen2+12);
-
+		free(now_GPS);
+		free(now_pcf);
 			return 1;
 			}
 			else
+			{		
+				free(now_GPS);
+				free(now_pcf);
 				return 0;
+			}
 		}
 		else 
+		{
 			return 0;
+			free(now_GPS);
+			free(now_pcf);
+		}
 	// decryption
 //	aes_decrypt_128(roundkeys, ciphertext, ciphertext);
-		free(now_GPS);
-		free(now_pcf);
+
 }
 /*********************************************END OF FILE**********************/
