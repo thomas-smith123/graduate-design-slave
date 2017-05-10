@@ -410,32 +410,32 @@ u8 shakehand(void)
 	now_GPS=(struct tm*)malloc(sizeof(struct tm));	
 	now_pcf=(struct tm*)malloc(sizeof(struct tm));
 		/******************* ‰»Î√‹¬Î*********************/
-//		printf(" ‰»Î√‹¬Î:\n");
-//		for(i=0;i!=16;i++)
-//		{
-////			keyvalue=13;
-////			keyvalue=keyarray_Scan();
-//			while(!keydown());
-//				keyvalue=keyarray_Scan();
-//			switch(keyvalue)
-//			{
-//				case 1:key[i]=keyvalue;printf("1");break;
-//				case 2:key[i]=keyvalue;printf("2");break;
-//				case 3:key[i]=keyvalue;printf("3");break;
-//				case 4:key[i]=keyvalue;printf("4");break;
-//				case 5:key[i]=keyvalue;printf("5");break;
-//				case 6:key[i]=keyvalue;printf("6");break;
-//				case 7:key[i]=keyvalue;printf("7");break;
-//				case 8:key[i]=keyvalue;printf("8");break;
-//				case 9:key[i]=keyvalue;printf("9");break;
-//				case 0:key[i]=0;printf("0");break;
-//				case 10:i-=2;break;
-//				default:break;
-//			}
-//		} 
-//		printf("key:");
-//		for(i=0;i<16;i++)printf("%d",key[i]);
-//		printf("\n");
+		printf(" ‰»Î√‹¬Î:\n");
+		for(i=0;i!=16;i++)
+		{
+//			keyvalue=13;
+//			keyvalue=keyarray_Scan();
+			while(!keydown());
+				keyvalue=keyarray_Scan();
+			switch(keyvalue)
+			{
+				case 1:key[i]=keyvalue;printf("1");break;
+				case 2:key[i]=keyvalue;printf("2");break;
+				case 3:key[i]=keyvalue;printf("3");break;
+				case 4:key[i]=keyvalue;printf("4");break;
+				case 5:key[i]=keyvalue;printf("5");break;
+				case 6:key[i]=keyvalue;printf("6");break;
+				case 7:key[i]=keyvalue;printf("7");break;
+				case 8:key[i]=keyvalue;printf("8");break;
+				case 9:key[i]=keyvalue;printf("9");break;
+				case 0:key[i]=0;printf("0");break;
+				case 10:i-=2;break;
+				default:break;
+			}
+		} 
+		printf("key:");
+		for(i=0;i<16;i++)printf("%d",key[i]);
+		printf("\n");
 									// key schedule
 	aes_key_schedule_128(key, roundkeys);//√‹‘ø¿©≥‰		
 	srand(now.second);
