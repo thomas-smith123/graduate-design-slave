@@ -64,16 +64,16 @@ void parseGpsBuffer()
 		today.day=(Save_Data.UTCDate[0]-'0')*10+(Save_Data.UTCDate[1]-'0');
 		today.month=(Save_Data.UTCDate[2]-'0')*10+(Save_Data.UTCDate[3]-'0');
 		today.year=(Save_Data.UTCDate[4]-'0')*10+(Save_Data.UTCDate[5]-'0');
-		printf("\ntoday.year %d",today.year);printf("today.month %d",today.month);printf("today.day %d",today.day);
-		printf("today.hour %d",today.hour);printf("today.mint %d",today.mint);printf("today.second %d \n",today.second);
+//		printf("\ntoday.year %d",today.year);printf("today.month %d",today.month);printf("today.day %d",today.day);
+//		printf("today.hour %d",today.hour);printf("today.mint %d",today.mint);printf("today.second %d \n",today.second);
 		printf("GPS 时间已设置 \n");		
 		PCF_SetTime(today.year,today.month,today.day,today.hour,today.mint,today.second);
-		printf("GPS时间 :");	printf("%d年 ",today.year);printf("%d月 ",today.month);printf("%d日 ",today.day);
-		printf("%d时 ",today.hour);printf("%d分 ",today.mint);printf("%d秒 \n",today.second);
+//		printf("GPS时间 :");	printf("%d年 ",today.year);printf("%d月 ",today.month);printf("%d日 ",today.day);
+//		printf("%d时 ",today.hour);printf("%d分 ",today.mint);printf("%d秒 \n",today.second);
 
 		now1=PCF8563_GetTime();
-		printf("pcf8563时间：");printf("%d年 ",now1.year);printf("%d月 ",now1.month);printf("%d日 ",now1.day);
-		printf("%d时 ",now1.hour);printf("%d分 ",now1.mint);printf("%d秒 \n",now1.second);
+//		printf("pcf8563时间：");printf("%d年 ",now1.year);printf("%d月 ",now1.month);printf("%d日 ",now1.day);
+//		printf("%d时 ",now1.hour);printf("%d分 ",now1.mint);printf("%d秒 \n",now1.second);
 	}
 }
 void printGpsBuffer()

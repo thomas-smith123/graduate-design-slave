@@ -160,7 +160,7 @@ void EXTI4_IRQHandler(void)
      //清除中断标志位
 		if(shakehand())
 		{
-			printf("\n unlock \n");
+			printf("\n unlock！！ \n");
 		}
   }// while(1)}
 
