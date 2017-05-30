@@ -1,7 +1,7 @@
 #My graduate designing
-
+=======================
 ##Using time based encryption
-
+-------------------------------
 ##Use a fixed key to encrypt information including time
 
 ##The whole system includes GPS,PCF8563,GSM,KEY and nRF2401
