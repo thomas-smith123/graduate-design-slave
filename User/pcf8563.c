@@ -1,7 +1,7 @@
 #include "pcf8563.h"
 #include "stm32f10x_gpio.h"
 #include "stm32f10x_i2c.h"
-
+#define FromBCD(X) (((X&0xf0)>>4)*10+((X)&0x0f))
 static void PCF8563_Init(void)
 {
   GPIO_InitTypeDef  GPIO_InitStructure; 
@@ -125,28 +125,28 @@ TIME PCF8563_GetTime(void)
   /***********算法有问题**************/
   tmp = PCF8563_Read(Seconds);//&0x7f;
  // tmp =(tmp/16)*10+tmp%16;
-	tmp=tmp&0x7f;
+	tmp=FromBCD(tmp&0x7f);
   getTIME.second = tmp;//????????????????
 
    tmp = PCF8563_Read(Minutes);//&0x7f;
 //  tmp =(tmp/16)*10+tmp%16;
-		tmp=tmp&0x7f;	
+		tmp=FromBCD(tmp&0x7f);	
   getTIME.mint = tmp;
 
   //???????????????,??????
   tmp = PCF8563_Read(Hours);//&0x3f;
 //  tmp =(tmp/16)*10+tmp%16;
-		tmp=tmp&0x3f;
+		tmp=FromBCD(tmp&0x3f);
   getTIME.hour = tmp;
 
   tmp = PCF8563_Read(Days);//&0x3f;
 //  tmp =(tmp/16)*10+tmp%16;
-	tmp=tmp&0x3f;
+	tmp=FromBCD(tmp&0x3f);
   getTIME.day = tmp;
 
   tmp = PCF8563_Read(Months);//&0x1f;
 //  tmp =(tmp/16)*10+tmp%16;
-tmp=tmp&0x1f;
+tmp=FromBCD(tmp&0x1f);
   getTIME.month = tmp;
 
   tmp = PCF8563_Read(Years);//&0x1f;

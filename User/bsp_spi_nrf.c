@@ -21,7 +21,8 @@
 #include "stdlib.h"
 #include "math.h"
 #include "time.h"
-
+#include "bsp_Timebase.h" 
+volatile u32 timer = 0;
  u8 RX_BUF[RX_PLOAD_WIDTH];		//接收数据缓存
  u8 TX_BUF[TX_PLOAD_WIDTH];		//发射数据缓存
  u8 TX_ADDRESS[TX_ADR_WIDTH] = {0x34,0x43,0x10,0x10,0x01};  // 定义一个静态发送地址
@@ -383,13 +384,12 @@ u8 shakehand(void)
 {
 //	__int64 time1,time2;
 	int diff_time,rand_const;
+//	volatile u32 timer = 0;
 	uint8_t ciphertext[AES_BLOCK_SIZE];
 	u8 i,status,keyvalue;
 	struct tm *now_GPS,*now_pcf;
 	TIME now;
-	uint8_t key[] = {
-		1, 3, 0, 5, 0, 5, 4, 1, 
-		4, 5, 1, 2, 3, 4, 5, 6};
+extern	uint8_t key[16];
 	uint8_t ID_Num[10],mingwen1[16],mingwen2[16],miwen1[16],miwen2[16];
 	uint8_t plaintext[16] = "1305054145jrd";
 /*	const uint8_t const_cipher[AES_BLOCK_SIZE] = {
@@ -403,39 +403,41 @@ u8 shakehand(void)
 									2,0,1,7,0,5,0,1,1,3,4,5,
 									0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 		};
+
 	uint8_t *syn,*seq,*ack,*fin,*time,*data;
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2 , ENABLE);
 	syn=frame+10;seq=frame+11;		
 	ack=frame+12;fin=frame+13;
 	time=frame+14;data=frame+28;
 	now_GPS=(struct tm*)malloc(sizeof(struct tm));	
 	now_pcf=(struct tm*)malloc(sizeof(struct tm));
 		/*******************输入密码*********************/
-		printf("输入密码:\n");
-		for(i=0;i!=16;i++)
-		{
-//			keyvalue=13;
-//			keyvalue=keyarray_Scan();
-			while(!keydown());
-				keyvalue=keyarray_Scan();
-			switch(keyvalue)
-			{
-				case 1:key[i]=keyvalue;printf("1");break;
-				case 2:key[i]=keyvalue;printf("2");break;
-				case 3:key[i]=keyvalue;printf("3");break;
-				case 4:key[i]=keyvalue;printf("4");break;
-				case 5:key[i]=keyvalue;printf("5");break;
-				case 6:key[i]=keyvalue;printf("6");break;
-				case 7:key[i]=keyvalue;printf("7");break;
-				case 8:key[i]=keyvalue;printf("8");break;
-				case 9:key[i]=keyvalue;printf("9");break;
-				case 0:key[i]=0;printf("0");break;
-				case 10:i-=2;break;
-				default:break;
-			}
-		} 
-		printf("key:");
-		for(i=0;i<16;i++)printf("%d",key[i]);
-		printf("\n");
+//		printf("输入密码:\n");
+//		for(i=0;i!=16;i++)
+//		{
+////			keyvalue=13;
+////			keyvalue=keyarray_Scan();
+//			while(!keydown());
+//				keyvalue=keyarray_Scan();
+//			switch(keyvalue)
+//			{
+//				case 1:key[i]=keyvalue;printf("1");break;
+//				case 2:key[i]=keyvalue;printf("2");break;
+//				case 3:key[i]=keyvalue;printf("3");break;
+//				case 4:key[i]=keyvalue;printf("4");break;
+//				case 5:key[i]=keyvalue;printf("5");break;
+//				case 6:key[i]=keyvalue;printf("6");break;
+//				case 7:key[i]=keyvalue;printf("7");break;
+//				case 8:key[i]=keyvalue;printf("8");break;
+//				case 9:key[i]=keyvalue;printf("9");break;
+//				case 0:key[i]=0;printf("0");break;
+//				case 10:i-=2;break;
+//				default:break;
+//			}
+//		} 
+//		printf("key:");
+//		for(i=0;i<16;i++)printf("%d",key[i]);
+//		printf("\n");
 									// key schedule
 	aes_key_schedule_128(key, roundkeys);//密钥扩充		
 	srand(now.second);
@@ -443,7 +445,8 @@ u8 shakehand(void)
 		ID_Num[i]=frame[i];
 		*syn=1;*seq=rand();*ack=0;*fin=0;//*data=0;
 		rand_const=*seq;
-	now=PCF8563_GetTime();
+		for(i=0;i<16;i++)printf("%d",key[i]);printf("\n");
+		now=PCF8563_GetTime();
 		printf("20%d年 ",now.year);printf("%d月 ",now.month);printf("%d日 ",now.day);
 		printf("%d时 ",now.hour);printf("%d分 ",now.mint);printf("%d秒 \n",now.second);
 	/*****************year******************/
