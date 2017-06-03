@@ -36,62 +36,62 @@
 u8 status1;	//用于判断接收/发送状态
 
 extern TIME today;
+TIME now;
 uint8_t ciphertext[AES_BLOCK_SIZE];
 //uint8_t key[16];
 int main(void)
 {
 			uint8_t i, r;
-//		KeyExti_Config();
 			delay_init();	
 	uart_init(9600);	 //串口初始化为9600
+//	uart3_init(9600);
 			NVIC_Configuration_gps(); 	 //设置NVIC中断分组2:2位抢占优先级，2位响应优先级
 //		PCF8563_Init();
 		delay_init();	
 		SPI_NRF_Init();
-		OLED_Init();
-		today.day=9;		today.hour=11;		
-		today.mint=20;		today.month=1;	
-		today.second=0;	
-		today.year=17;
-	PCF_SetTime(today.year,today.month,today.day,today.hour,today.mint,today.second);
-//	KeyExti_Config();
 //显示信息，可用
-		OLED_ShowNum(0,0,2,1,8);
-		OLED_ShowCHinese(0,0,13);
-		OLED_ShowCHinese(18,0,14);
-		OLED_ShowCHinese(36,0,15);
-		OLED_ShowCHinese(54,0,16);
-		OLED_ShowCHinese(72,0,17);
-		OLED_ShowCHinese(90,0,18);
 		/* TIM2 定时配置 */	
   TIM2_Configuration();
-	
+	Key2_GPIO_Config();
+	keyarry_GPIO_init();
 	/* 实战定时器的中断优先级 */
 	TIM2_NVIC_Configuration();
-
-//	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2 , ENABLE);
 	
   /*检测NRF模块与MCU的连接*/
 		status1 = NRF_Check(); 
+  if(status1 == SUCCESS)	   
+	{
+		printf("\r\n   NRF与MCU连接成功\r\n"); 
+//		LCD_DispStr(10, 10, (uint8_t *)"SUCCESSFULLY CONNECTED!", RED);	
+	} 
+  else	  
+	{
+		printf("\r\n   正在检测NRF与MCU是否正常连接。。。\r\n");
+//		LCD_DispStr(10, 10, (uint8_t *)"CHECKING CONNECTED SITUATION...", RED);	
+	}
 
 	printf("Welcome to use!\r\n");
-//	for(i=0;i<16;i++)
-//		printf("%2x ",ciphertext[i]);
-//	printf("\n");
+	while(1)
+	{
+		printGpsBuffer();
+		parseGpsBuffer();
+		now=PCF8563_GetTime();
+		if(now.second%10==0)
+		{
+			RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2 , ENABLE);
+			break;
+		}
+	}
 	while(1)	
 		{	
 		CLI();
 		SEI();	
-	//	GPIO_SetBits(GPIOE,GPIO_Pin_4);	
-			parseGpsBuffer();
-			printGpsBuffer();
-			if(!Key2_Scan(GPIOE,4))
+
+			if(Key2_Scan(GPIOE,GPIO_Pin_4)==KEY_ON)
 			{
 				if(shakehand())
 						printf("\n unlock！！ \n");
 			}
-//			if(time==5000)
-//			{printf("123\n");time=0;}
 		};
 	
 /*********************************************END OF FILE**********************/

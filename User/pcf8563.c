@@ -69,9 +69,7 @@ u8 PCF8563_Read(u8 PCF_addr)
 {
 	u8 rev_data;
 	
-//	PCF8563_Init();
-	
-//	I2C_Mode_Config();
+
 
 	I2C_GenerateSTART(I2C1, ENABLE);
 
@@ -122,6 +120,9 @@ TIME PCF8563_GetTime(void)
 {
   int tmp;
   TIME getTIME;
+		PCF8563_Init();
+	
+	I2C_Mode_Config();
   /***********算法有问题**************/
   tmp = PCF8563_Read(Seconds);//&0x7f;
  // tmp =(tmp/16)*10+tmp%16;

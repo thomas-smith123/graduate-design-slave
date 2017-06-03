@@ -7,9 +7,10 @@ void Key2_GPIO_Config()
 	GPIO_InitTypeDef GPIO_InitStructure;
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOE,ENABLE);
 	GPIO_InitStructure.GPIO_Mode=GPIO_Mode_IPU;//…œ¿≠ ‰»Î
-	GPIO_InitStructure.GPIO_Pin=GPIO_Pin_8|GPIO_Pin_10|GPIO_Pin_9|GPIO_Pin_11;
-	GPIO_InitStructure.GPIO_Speed=GPIO_Speed_10MHz;
+	GPIO_InitStructure.GPIO_Pin=GPIO_Pin_8|GPIO_Pin_10|GPIO_Pin_9|GPIO_Pin_11|GPIO_Pin_4;
+	GPIO_InitStructure.GPIO_Speed=GPIO_Speed_50MHz;
 	GPIO_Init(GPIOE,&GPIO_InitStructure);
+	GPIO_SetBits(GPIOE,GPIO_Pin_4);	
 }
 u8 Key2_Scan(GPIO_TypeDef* GPIOx,u16 GPIO_Pin)
 {

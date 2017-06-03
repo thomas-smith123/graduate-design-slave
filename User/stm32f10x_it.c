@@ -173,7 +173,7 @@ void EXTI4_IRQHandler(void)
 } 
 void TIM2_IRQHandler(void)
 {
-//	u8 i;
+	u8 i;
 	TIME today;
 	if ( TIM_GetITStatus(TIM2 , TIM_IT_Update) != RESET ) 
 	{	
@@ -188,7 +188,7 @@ void TIM2_IRQHandler(void)
 			key[8]=today.hour/10;key[9]=today.hour%10;
 			key[10]=today.mint/10;key[11]=today.mint%10;
 			key[12]=today.second/ 10;key[13]=today.second%10;
-			key[14]=0;key[15]=0;timer=0;
+			key[14]=0;key[15]=0;timer=0;for(i=0;i<16;i++)printf("%d",key[i]);
 			printf("mark!\n");
 		}
 		
