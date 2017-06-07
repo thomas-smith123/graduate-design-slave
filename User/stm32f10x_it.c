@@ -33,7 +33,8 @@
 /** @addtogroup STM32F10x_StdPeriph_Template
   * @{
   */
-
+extern volatile u32 timer=0;
+uint8_t key[16];
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
@@ -158,6 +159,8 @@ void EXTI4_IRQHandler(void)
 	if(EXTI_GetITStatus(EXTI_Line4) != RESET) //确保是否产生了EXTI Line中断
 	{
      //清除中断标志位
+		RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2 , ENABLE);
+
 		if(shakehand())
 		{
 			printf("\n unlock \n");
@@ -180,6 +183,29 @@ void EXTI4_IRQHandler(void)
 /**
   * @}
   */ 
-
+void TIM2_IRQHandler(void)
+{
+	u8 i;
+	TIME today;
+	if ( TIM_GetITStatus(TIM2 , TIM_IT_Update) != RESET ) 
+	{	
+		timer++;
+		if(timer==50)//5ms
+		{
+			today=PCF8563_GetTime();
+			key[0]=2;key[1]=0;
+			key[2]=today.year/10;key[3]=today.year%10;
+			key[4]=today.month/10;key[5]=today.month%10;
+			key[6]=today.day/10;key[7]=today.day%10;
+			key[8]=today.hour/10;key[9]=today.hour%10;
+			key[10]=today.mint/10;key[11]=today.mint%10;
+			key[12]=today.second/ 10;key[13]=today.second%10;
+			key[14]=0;key[15]=0;timer=0;for(i=0;i<16;i++)printf("%d",key[i]);
+			printf("mark!\n");
+		}
+		
+		TIM_ClearITPendingBit(TIM2 , TIM_FLAG_Update);  		 
+	}		 	
+}
 
 /******************* (C) COPYRIGHT 2011 STMicroelectronics *****END OF FILE****/

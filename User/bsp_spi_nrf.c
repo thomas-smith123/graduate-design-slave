@@ -387,9 +387,7 @@ u8 shakehand(void)
 	u8 i,status,keyvalue;
 	struct tm *now_GPS,*now_pcf;
 	TIME now;
-	uint8_t key[] = {
-		1, 3, 0, 5, 0, 5, 4, 1, 
-		4, 5, 1, 2, 3, 4, 5, 6};
+extern	uint8_t key[16];
 	uint8_t ID_Num[10],mingwen1[16],mingwen2[16],miwen1[16],miwen2[16];
 	uint8_t plaintext[16] = "1305054145jrd";
 /*	const uint8_t const_cipher[AES_BLOCK_SIZE] = {

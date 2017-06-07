@@ -87,11 +87,11 @@ void uart_init(u32 bound)
 
    //Usart1 NVIC 配置
 
-    NVIC_InitStructure.NVIC_IRQChannel = USART1_IRQn;
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=3 ;//抢占优先级3
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;		//子优先级3
-	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;			//IRQ通道使能
-	NVIC_Init(&NVIC_InitStructure);	//根据指定的参数初始化VIC寄存器
+//    NVIC_InitStructure.NVIC_IRQChannel = USART1_IRQn;
+//	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=3 ;//抢占优先级3
+//	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;		//子优先级3
+//	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;			//IRQ通道使能
+//	NVIC_Init(&NVIC_InitStructure);	//根据指定的参数初始化VIC寄存器
   
    //USART 初始化设置
 
@@ -105,20 +105,62 @@ void uart_init(u32 bound)
     USART_Init(USART1, &USART_InitStructure); //初始化串口
     USART_ITConfig(USART1, USART_IT_RXNE, ENABLE);//开启中断
     USART_Cmd(USART1, ENABLE);                    //使能串口 
+		
+			RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3, ENABLE);
+
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_Init(GPIOB, &GPIO_InitStructure);    
+	/* Configure USART1 Rx (PB11) as input floating */
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
+	GPIO_Init(GPIOB, &GPIO_InitStructure);
+	
+
+	/* Configure the NVIC Preemption Priority Bits */  
+	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_0);
+	
+	/* Enable the USARTy Interrupt */
+	NVIC_InitStructure.NVIC_IRQChannel = USART3_IRQn;	 
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;
+	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+	NVIC_Init(&NVIC_InitStructure);
+
+	
+	/* USART1 mode config */
+	USART_InitStructure.USART_BaudRate = bound;
+	USART_InitStructure.USART_WordLength = USART_WordLength_8b;
+	USART_InitStructure.USART_StopBits = USART_StopBits_1;
+	USART_InitStructure.USART_Parity = USART_Parity_No ;
+	USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
+	USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
+//	USART_Init(USART3, &USART_InitStructure);
+	
+	/* 使能串口1接收中断 */
+	USART_ITConfig(USART3, USART_IT_RXNE, ENABLE);
+	
+//	USART_Cmd(USART3, ENABLE);
+
+    USART_Init(USART3, &USART_InitStructure); //初始化串口
+    USART_ITConfig(USART3, USART_IT_RXNE, ENABLE);//开启中断
+    USART_Cmd(USART3, ENABLE);                    //使能串口 
 
 
 	CLR_Buf();//清空缓存
 }
 
-void USART1_IRQHandler(void)                	//串口1中断服务程序
+void USART3_IRQHandler(void)                	//串口1中断服务程序
 {
 	u8 Res;
 #ifdef OS_TICKS_PER_SEC	 	//如果时钟节拍数定义了,说明要使用ucosII了.
 	OSIntEnter();    
 #endif
-	if(USART_GetITStatus(USART1, USART_IT_RXNE) != RESET) 
+	if(USART_GetITStatus(USART3, USART_IT_RXNE) != RESET) 
 	{
-		Res =USART_ReceiveData(USART1);//(USART1->DR);	//读取接收到的数据
+		Res =USART_ReceiveData(USART3);//(USART1->DR);	//读取接收到的数据
 	
 	if(Res == '$')
 	{
@@ -132,11 +174,11 @@ void USART1_IRQHandler(void)                	//串口1中断服务程序
 	{
 		if(Res == '\n')									   
 		{
-			memset(Save_Data.GPS_Buffer, 0, GPS_Buffer_Length);      //清空
+//			memset(Save_Data.GPS_Buffer, 0, GPS_Buffer_Length);      //清空
 			memcpy(Save_Data.GPS_Buffer, USART_RX_BUF, point1); 	//保存数据
 			Save_Data.isGetData = true;
 			point1 = 0;
-			memset(USART_RX_BUF, 0, USART_REC_LEN);      //清空				
+//			memset(USART_RX_BUF, 0, USART_REC_LEN);      //清空				
 		}	
 				
 	}
@@ -203,7 +245,7 @@ void clrStruct()
 	memset(Save_Data.longitude, 0, longitude_Length);
 	memset(Save_Data.E_W, 0, E_W_Length);
 	memset(Save_Data.UTCDate, 0, UTCDate_Length);
-
+	
 }
 
 #endif	

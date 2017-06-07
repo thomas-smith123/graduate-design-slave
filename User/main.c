@@ -24,6 +24,7 @@
 #include "AES.h"
 #include "usart.h"
 #include "GPS.h"
+#include "bsp_Timebase.h"
 #include "sys.h"
 #define CLI() __set_PRIMASK(1)		/* 关闭总中断 */  
 #define SEI() __set_PRIMASK(0)				/* 开放总中断 */ 
@@ -53,6 +54,10 @@ int main(void)
 		0x69, 0x34, 0xab, 0x43, 0x64, 0x14, 0x8f, 0xb9};	
 	uint8_t roundkeys[AES_ROUND_KEY_SIZE];
 */
+			/* TIM2 定时配置 */	
+  TIM2_Configuration();
+		/* 实战定时器的中断优先级 */
+	TIM2_NVIC_Configuration();
 		KeyExti_Config();
 			delay_init();	
 	uart_init(9600);	 //串口初始化为9600
