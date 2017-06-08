@@ -84,6 +84,17 @@ int main(void)
 	
   /*检测NRF模块与MCU的连接*/
 		status1 = NRF_Check(); 
+		  if(status1 == SUCCESS)	   
+	{
+		printf("\r\n   NRF与MCU连接成功\r\n"); 
+//		LCD_DispStr(10, 10, (uint8_t *)"SUCCESSFULLY CONNECTED!", RED);	
+	} 
+  else	  
+	{
+		printf("\r\n   正在检测NRF与MCU是否正常连接。。。\r\n");
+//		LCD_DispStr(10, 10, (uint8_t *)"CHECKING CONNECTED SITUATION...", RED);	
+	}
+
 	// key schedule
 /*	aes_key_schedule_128(key, roundkeys);//密钥扩充
 	// encryption
