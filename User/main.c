@@ -66,22 +66,13 @@ int main(void)
 		delay_init();	
 		SPI_NRF_Init();
 		OLED_Init();
-		today.day=9;		today.hour=11;		
-		today.mint=20;		today.month=1;	
-		today.second=0;	
-		today.year=17;
-	PCF_SetTime(today.year,today.month,today.day,today.hour,today.mint,today.second);
+//		today.day=9;		today.hour=11;		
+//		today.mint=20;		today.month=1;	
+//		today.second=0;	
+//		today.year=17;
+//	PCF_SetTime(today.year,today.month,today.day,today.hour,today.mint,today.second);
 //	KeyExti_Config();
 //显示信息，可用
-		OLED_ShowNum(0,0,2,1,8);
-		OLED_ShowCHinese(0,0,13);
-		OLED_ShowCHinese(18,0,14);
-		OLED_ShowCHinese(36,0,15);
-		OLED_ShowCHinese(54,0,16);
-		OLED_ShowCHinese(72,0,17);
-		OLED_ShowCHinese(90,0,18);
-		
-	
   /*检测NRF模块与MCU的连接*/
 		status1 = NRF_Check(); 
 		  if(status1 == SUCCESS)	   

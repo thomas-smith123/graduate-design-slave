@@ -193,15 +193,17 @@ void TIM2_IRQHandler(void)
 		if(timer==50)//5ms
 		{
 			today=PCF8563_GetTime();
-			key[0]=2;key[1]=0;
-			key[2]=today.year/10;key[3]=today.year%10;
-			key[4]=today.month/10;key[5]=today.month%10;
-			key[6]=today.day/10;key[7]=today.day%10;
-			key[8]=today.hour/10;key[9]=today.hour%10;
-			key[10]=today.mint/10;key[11]=today.mint%10;
-			key[12]=today.second/ 10;key[13]=today.second%10;
-			key[14]=0;key[15]=0;timer=0;for(i=0;i<16;i++)printf("%d",key[i]);
-			printf("mark!\n");
+		
+				key[0]=2;key[1]=0;
+				key[2]=today.year/10;key[3]=today.year%10;
+				key[4]=today.month/10;key[5]=today.month%10;
+				key[6]=today.day/10;key[7]=today.day%10;
+				key[8]=today.hour/10;key[9]=today.hour%10;
+				key[10]=today.mint/10;key[11]=today.mint%10;
+				key[12]=today.second/ 10;key[13]=today.second%10;
+				key[14]=0;key[15]=0;timer=0;//for(i=0;i<16;i++)printf("%d",key[i]);
+			//	printf("mark!\n");
+	
 		}
 		
 		TIM_ClearITPendingBit(TIM2 , TIM_FLAG_Update);  		 

@@ -2,7 +2,7 @@
 #include "stm32f10x_gpio.h"
 #include "stm32f10x_i2c.h"
 #define FromBCD(X) (((X&0xf0)>>4)*10+((X)&0x0f))
-static void PCF8563_Init(void)
+void PCF8563_Init(void)
 {
   GPIO_InitTypeDef  GPIO_InitStructure; 
 
@@ -120,8 +120,11 @@ void PCF_SetTime(int year, int month, int day, int hour, int mint, int second)
 }
 TIME PCF8563_GetTime(void)
 {
+
   int tmp;
-  TIME getTIME;
+  TIME getTIME;	
+	PCF8563_Init();
+	I2C_Mode_Config();	
   /***********算法有问题**************/
   tmp = PCF8563_Read(Seconds);//&0x7f;
  // tmp =(tmp/16)*10+tmp%16;
