@@ -70,8 +70,8 @@ void parseGpsBuffer()
 //		printf("today.hour %d",today.hour);printf("today.mint %d",today.mint);printf("today.second %d \n",today.second);
 			
 				now1=PCF8563_GetTime();
-		printf("20%d年 ",now1.year);printf("%d月 ",now1.month);printf("%d日 ",now1.day);
-		printf("%d时 ",now1.hour);printf("%d分 ",now1.mint);printf("%d秒 \n",now1.second);
+//		printf("20%d年 ",now1.year);printf("%d月 ",now1.month);printf("%d日 ",now1.day);
+//		printf("%d时 ",now1.hour);printf("%d分 ",now1.mint);printf("%d秒 \n",now1.second);
 //		printf("GPS时间 :");	printf("%d年 ",today.year);printf("%d月 ",today.month);printf("%d日 ",today.day);
 //		printf("%d时 ",today.hour);printf("%d分 ",today.mint);printf("%d秒 \n",today.second);
 
@@ -101,7 +101,7 @@ void printGpsBuffer()
 		now_GPS->tm_mon=(Save_Data.UTCDate[2]-'0')*10+(Save_Data.UTCDate[3]-'0');
 		now_GPS->tm_year=(Save_Data.UTCDate[4]-'0')*10+(Save_Data.UTCDate[5]-'0');
 		PCF_SetTime(now_GPS->tm_year,now_GPS->tm_mon,now_GPS->tm_mday,now_GPS->tm_hour,now_GPS->tm_min,now_GPS->tm_sec);
-		 printf("GPS 时间已设置 \n");
+//		 printf("GPS 时间已设置 \n");
 
 //		if(Save_Data.isUsefull)
 //		{

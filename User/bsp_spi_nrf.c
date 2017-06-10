@@ -388,6 +388,7 @@ u8 shakehand(void)
 	struct tm *now_GPS,*now_pcf;
 	TIME now;
 extern	uint8_t key[16];
+	uint8_t yanzhengma[14];
 	uint8_t ID_Num[10],mingwen1[16],mingwen2[16],miwen1[16],miwen2[16];
 	uint8_t plaintext[16] = "1305054145jrd";
 /*	const uint8_t const_cipher[AES_BLOCK_SIZE] = {
@@ -442,8 +443,8 @@ extern	uint8_t key[16];
 		*syn=1;*seq=rand();*ack=0;*fin=0;//*data=0;
 		rand_const=*seq;
 	now=PCF8563_GetTime();
-		printf("20%d年 ",now.year);printf("%d月 ",now.month);printf("%d日 ",now.day);
-		printf("%d时 ",now.hour);printf("%d分 ",now.mint);printf("%d秒 \n",now.second);
+//		printf("20%d年 ",now.year);printf("%d月 ",now.month);printf("%d日 ",now.day);
+//		printf("%d时 ",now.hour);printf("%d分 ",now.mint);printf("%d秒 \n",now.second);
 	/*****************year******************/
 	*time=2;//2
 	
@@ -515,7 +516,7 @@ extern	uint8_t key[16];
 			frame[10+i]=miwen1[i];
 			frame[26+i]=miwen2[i];
 		}//帧重建
-		printf("帧重建完成\n");
+//		printf("帧重建完成\n");
 		now_GPS->tm_year=*time*1000+*(time+1)*100+*(time+2)*10+*(time+3);
 		now_GPS->tm_mon=*(time+4)*10+*(time+5);
 		now_GPS->tm_mday=*(time+6)*10+*(time+7);
@@ -529,7 +530,7 @@ extern	uint8_t key[16];
 		now_pcf->tm_mon=now.month;
 		now_pcf->tm_year=2000+now.year;
 		diff_time=difftime(mktime(now_GPS),mktime(now_pcf));////////////////////next///////		
-		printf("%d diff_time \n",diff_time);
+//		printf("%d diff_time \n",diff_time);
 		if(abs(diff_time)<=60)
 		{
 			if(*syn==1 && *ack==(rand_const+1))//在重建帧之前判断
@@ -570,7 +571,7 @@ extern	uint8_t key[16];
 		for(i=0;i<16;i++)printf("%d",mingwen1[i]);
 		printf("\n");
 		for(i=0;i<16;i++)printf("%d",mingwen2[i]);
-		printf("\n");
+		printf("\r\n");
 
 				// encryption
 			aes_encrypt_128(roundkeys, mingwen1, miwen1);//明文、密文、轮密钥
@@ -589,7 +590,7 @@ extern	uint8_t key[16];
 			status = NRF_Tx_Dat(miwen2+4);
 			status = NRF_Tx_Dat(miwen2+8);
 			status = NRF_Tx_Dat(miwen2+12);
-			printf("shakehand init!\n");
+			printf("shakehand init!\r\n");
 //			printf("输入验证码:");			printf("输入验证码：\n");
 		for(i=0;i!=14;i++)
 		{
@@ -597,27 +598,27 @@ extern	uint8_t key[16];
 				keyvalue=keyarray_Scan();
 			switch(keyvalue)
 			{
-				case 1:key[i]=keyvalue;printf("1");break;
-				case 2:key[i]=keyvalue;printf("2");break;
-				case 3:key[i]=keyvalue;printf("3");break;
-				case 4:key[i]=keyvalue;printf("4");break;
-				case 5:key[i]=keyvalue;printf("5");break;
-				case 6:key[i]=keyvalue;printf("6");break;
-				case 7:key[i]=keyvalue;printf("7");break;
-				case 8:key[i]=keyvalue;printf("8");break;
-				case 9:key[i]=keyvalue;printf("9");break;
-				case 0:key[i]=0;printf("0");break;
+				case 1:yanzhengma[i]=keyvalue;printf("1");break;
+				case 2:yanzhengma[i]=keyvalue;printf("2");break;
+				case 3:yanzhengma[i]=keyvalue;printf("3");break;
+				case 4:yanzhengma[i]=keyvalue;printf("4");break;
+				case 5:yanzhengma[i]=keyvalue;printf("5");break;
+				case 6:yanzhengma[i]=keyvalue;printf("6");break;
+				case 7:yanzhengma[i]=keyvalue;printf("7");break;
+				case 8:yanzhengma[i]=keyvalue;printf("8");break;
+				case 9:yanzhengma[i]=keyvalue;printf("9");break;
+				case 0:yanzhengma[i]=0;printf("0");break;
 				case 10:i-=2;break;
 				default:break;
 			}
 		} 
-		printf("key:");
+		printf("\r\nkey:");
 		for(i=0;i<14;i++)
 		{
-			printf("%d",key[i]);
-			data[i]=key[i];
+			printf("%d",yanzhengma[i]);
+			data[i]=yanzhengma[i];
 		}	
-		printf("\n");		
+		printf("\r\n");		
 			now=PCF8563_GetTime();		
 		/*****************year******************/
 		*time=2;//2

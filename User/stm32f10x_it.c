@@ -163,7 +163,7 @@ void EXTI4_IRQHandler(void)
 
 		if(shakehand())
 		{
-			printf("\n unlock \n");
+//			printf("\n unlock \n");
 		}
   }// while(1)}
 

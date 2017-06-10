@@ -77,12 +77,12 @@ int main(void)
 		status1 = NRF_Check(); 
 		  if(status1 == SUCCESS)	   
 	{
-		printf("\r\n   NRF与MCU连接成功\r\n"); 
+		printf("\r\n   NRF has connected to MCU\r\n"); 
 //		LCD_DispStr(10, 10, (uint8_t *)"SUCCESSFULLY CONNECTED!", RED);	
 	} 
   else	  
 	{
-		printf("\r\n   正在检测NRF与MCU是否正常连接。。。\r\n");
+		printf("\r\n   checking connection between NRF and MCU...\r\n");
 //		LCD_DispStr(10, 10, (uint8_t *)"CHECKING CONNECTED SITUATION...", RED);	
 	}
 
@@ -108,7 +108,7 @@ int main(void)
 		{	
 		CLI();
 		SEI();	
-GPIO_SetBits(GPIOE,GPIO_Pin_4);	
+		GPIO_SetBits(GPIOE,GPIO_Pin_4);	
 			parseGpsBuffer();
 			printGpsBuffer();
 		};
